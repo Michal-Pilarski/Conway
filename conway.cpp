@@ -7,7 +7,7 @@ using namespace std;
 
 enum CellStates { DEATH, LIVE };
 
-class GameOfLife {
+class Game {
 private:
 	char liveChar = '%';
 	char deathChar = ' ';
@@ -16,14 +16,14 @@ private:
 	int liveCells;
 	int X_DIM;
 	int Y_DIM;
-	int SLEEP_MS = 10;
+	int SLEEP = 10;
 	int MAX_GENS = 1000;
 	vector<vector<CellStates>> grid;
 	HANDLE hStdOut;
 	CONSOLE_CURSOR_INFO curInfo;
 
 public:
-	GameOfLife(int x, int y);
+	Game(int x, int y);
 	void hideCursor();
 	void initializeGrid();
 	void printGrid();
@@ -34,7 +34,7 @@ public:
 	void start();
 };
 
-GameOfLife::GameOfLife(int x = 20, int y = 50) {
+Game::Game(int x = 20, int y = 50) {
 	X_DIM = x;
 	Y_DIM = y;
 	totalCells = X_DIM * Y_DIM;
@@ -43,7 +43,7 @@ GameOfLife::GameOfLife(int x = 20, int y = 50) {
 	initializeGrid();
 }
 
-void GameOfLife::hideCursor() {
+void Game::hideCursor() {
 	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	GetConsoleCursorInfo(hStdOut, &curInfo);
 	curInfo.bVisible = FALSE;
@@ -51,7 +51,7 @@ void GameOfLife::hideCursor() {
 	return;
 }
 
-void GameOfLife::initializeGrid() {
+void Game::initializeGrid() {
 	srand(time(0));
 	grid = vector<vector<CellStates>>(X_DIM);
 	for (int i = 0; i < X_DIM; i++) {
@@ -62,7 +62,7 @@ void GameOfLife::initializeGrid() {
 	return;
 }
 
-int GameOfLife::nextLiveCells(int i, int j) {
+int Game::nextLiveCells(int i, int j) {
 	int lives = 0;
 	for (int k = -1; k <= 1; k++) {
 		for (int h = -1; h <= 1; h++) {
@@ -79,7 +79,7 @@ int GameOfLife::nextLiveCells(int i, int j) {
 	return lives;
 }
 
-void GameOfLife::nextGen() {
+void Game::nextGen() {
 	vector<vector<CellStates>> tmpGrid(X_DIM);
 	for (int i = 0; i < X_DIM; i++) {
 		tmpGrid[i] = vector<CellStates>(Y_DIM);;
@@ -101,7 +101,7 @@ void GameOfLife::nextGen() {
 	return;
 }
 
-void GameOfLife::printGrid() {
+void Game::printGrid() {
 	system("cls");
 
 	for (int i = 0; i < X_DIM; i++) {
@@ -118,7 +118,7 @@ void GameOfLife::printGrid() {
 	return;
 }
 
-int GameOfLife::countLiveCells() {
+int Game::countLiveCells() {
 	int liveCells = 0;
 
 	for (int i = 0; i < X_DIM; i++)
@@ -129,7 +129,7 @@ int GameOfLife::countLiveCells() {
 	return liveCells;
 }
 
-void GameOfLife::start() {
+void Game::start() {
 	hideCursor();
 
 	while (gen < MAX_GENS) {
@@ -138,7 +138,7 @@ void GameOfLife::start() {
 		printGrid();
 		liveCells = countLiveCells();
 		system(("title Tugamer89's Game of Life - Gen: " + to_string(gen) + " - Live cells: " + to_string(liveCells) + "/" + to_string(totalCells)).c_str());
-		Sleep(SLEEP_MS);
+		Sleep(SLEEP);
 	}
 
 	return;
@@ -148,7 +148,7 @@ void GameOfLife::start() {
 
 int main() {
 
-	GameOfLife game(30, 120);
+	Game game(30, 120);
 	game.start();
 
 	cout << endl;
