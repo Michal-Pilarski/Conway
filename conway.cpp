@@ -9,14 +9,14 @@ enum CellStates { DEATH, LIVE };
 
 class Game {
 private:
-	char liveChar = '%';
+	char liveChar = '#';
 	char deathChar = ' ';
 	int gen;
 	int totalCells;
 	int liveCells;
 	int X_DIM;
 	int Y_DIM;
-	int SLEEP = 10;
+	int SLEEP = 100;
 	int MAX_GENS = 1000;
 	vector<vector<CellStates>> grid;
 	HANDLE hStdOut;
